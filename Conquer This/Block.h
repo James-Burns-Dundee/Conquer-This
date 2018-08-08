@@ -18,4 +18,6 @@ public:
 	float rightSide;
 	int scale;
 	sf::Sprite image;
+
+	// Functions
 };
