@@ -6,11 +6,8 @@ Player::Player(sf::Sprite sprite)
 	yVelocity = 0;
 	xPos = 0;
 	yPos = 0;
+	jumpState = 0;
 	scale = 1;
-	leftSide = image.getPosition().x;
-	rightSide = image.getPosition().x + (image.getLocalBounds().width* scale);
-	topSide = image.getPosition().y;
-	bottomSide = image.getPosition().y + (image.getLocalBounds().height * scale);
 	faceRight = true;
 	onGround = false;
 	isColliding = false;
@@ -21,27 +18,27 @@ Player::~Player()
 {
 }
 
-void Player::update(bool plUp, bool plDwn, bool plLft, bool plRgt, Block platforms)
+void Player::update(bool keyRight, bool keyLeft, bool keyUp, bool keyDown, Block level[5], float dt)
 {
-	if (plRgt)
+	if (keyRight)
 	{
 		faceRight = true;
-		xVelocity = 1;
+		xVelocity = 200;
 	}
-	if (plLft)
+	if (keyLeft)
 	{
 		faceRight = false;
-		xVelocity = -1;
+		xVelocity = -200;
 	}
-	if (plUp)
+	if (keyUp)
 	{
-		yVelocity = -1;
+		yVelocity = -200;
 	}
-	if (plDwn)
+	if (keyDown)
 	{
-		yVelocity = 1;
+		yVelocity = 200;
 	}
-	if (!(plRgt || plLft))
+	if (!(keyRight || keyLeft))
 	{
 		xVelocity = 0;
 	}
@@ -49,38 +46,43 @@ void Player::update(bool plUp, bool plDwn, bool plLft, bool plRgt, Block platfor
 	{
 		yVelocity = 0;
 	}
-	image.move(sf::Vector2f(xVelocity, 0));
-	image.move(sf::Vector2f(0, yVelocity));
-	collision(xVelocity, 0, platforms);
-	collision(0, yVelocity, platforms);
+	image.move(sf::Vector2f(xVelocity * dt, 0));
+	collision(xVelocity, 0, level);
+	image.move(sf::Vector2f(0, yVelocity * dt));
+	collision(0, yVelocity, level);
 }
 
-void Player::collision(float dx, float dy, Block platforms)
+void Player::collision(float dx, float dy, Block level[5])
 {
-	if (rightSide > platforms.leftSide && leftSide < platforms.rightSide &&
-	    topSide < platforms.bottomSide && bottomSide > platforms.topSide)
+	for (int i = 0; i < 5; i++)
 	{
-		isColliding = true;
-	}
-	else
-	{
-		isColliding = false;
-	}
-
-	if (dx > 0)
-	{
-		image.setPosition(sf::Vector2f(platforms.leftSide - image.getLocalBounds().width * scale, image.getPosition().y));
-	}
-	if (dx < 0)
-	{
-		image.setPosition(sf::Vector2f(platforms.rightSide, image.getPosition().y));
-	}
-	if (dy > 0)
-	{
-		image.setPosition(sf::Vector2f(image.getPosition().x, platforms.topSide + image.getLocalBounds().height * scale));
-	}
-	if (dy < 0)
-	{
-		image.setPosition(sf::Vector2f(image.getPosition().x, platforms.bottomSide));
+		if (image.getPosition().x + (image.getLocalBounds().width* scale) > level[i].leftSide && image.getPosition().x < level[i].rightSide &&
+			image.getPosition().y < level[i].bottomSide && image.getPosition().y + (image.getLocalBounds().height * scale) > level[i].topSide)
+		{
+			isColliding = true;
+		}
+		else
+		{
+			isColliding = false;
+		}
+		if (isColliding)
+		{
+			if (dx > 0)
+			{
+				image.setPosition(sf::Vector2f(level[i].leftSide - image.getLocalBounds().width * scale, image.getPosition().y));
+			}
+			if (dx < 0)
+			{
+				image.setPosition(sf::Vector2f(level[i].rightSide, image.getPosition().y));
+			}
+			if (dy > 0)
+			{
+				image.setPosition(sf::Vector2f(image.getPosition().x, level[i].topSide - image.getLocalBounds().height * scale));
+			}
+			if (dy < 0)
+			{
+				image.setPosition(sf::Vector2f(image.getPosition().x, level[i].bottomSide));
+			}
+		}
 	}
 }

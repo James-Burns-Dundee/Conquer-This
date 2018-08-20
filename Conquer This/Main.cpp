@@ -10,18 +10,13 @@ int main()
 	// Create the main window
 	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Platformer");
 
-	bool playerUp, playerDown, playerLeft, playerRight = false;
-
-	sf::Font consolasFont;
-	consolasFont.loadFromFile("Assets/Fonts/consola.ttf");
-
-	sf::Text helloText("Hello sprite", consolasFont, 12);
+	bool keyUp, keyDown, keyLeft, keyRight = false;
 
 	sf::Texture platformSpriteSheet;
 
 	platformSpriteSheet.loadFromFile("Assets/Images/PlatformSheet1.png");
 	sf::Sprite earthSprite(platformSpriteSheet);
-	earthSprite.setTextureRect(sf::IntRect(0, 0, 15, 15));
+	earthSprite.setTextureRect(sf::IntRect(15, 15, 15, 15));
 
 	sf::Texture playerTexture;
 	playerTexture.loadFromFile("Assets/Images/Sprite.png");
@@ -30,8 +25,16 @@ int main()
 
 	Player playerObj(playerSprite);
 
-	Block platformObj(100, 100, earthSprite);
+	Block level[5] =
+	{
+		Block(100, 200, earthSprite),
+		Block(145, 200, earthSprite),
+		Block(190, 200, earthSprite),
+		Block(235, 200, earthSprite),
+		Block(280, 200, earthSprite)
+	};
 
+	sf::Clock gameClock;
 	// Start the game loop
 	while (window.isOpen())
 	{
@@ -45,48 +48,26 @@ int main()
 				window.close();
 			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			playerRight = true;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			playerLeft = true;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			playerUp = true;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			playerDown = true;
-		}
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{
-			playerRight = false;
-		}
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			playerLeft = false;
-		}
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-		{
-			playerUp = false;
-		}
-		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-		{
-			playerDown = false;
-		}
+		keyRight = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+		keyLeft = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+		keyUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
+		keyDown = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
 
-		playerObj.update(playerUp, playerDown, playerLeft, playerRight, platformObj);
+		float deltaTime = gameClock.getElapsedTime().asSeconds();
+
+		playerObj.update(keyRight, keyLeft, keyUp, keyDown, level, deltaTime);
+
+		gameClock.restart().asSeconds();
 
 		// Clear screen
 		window.clear();
 
-		// Draw the sprite
-		window.draw(platformObj.image);
 		window.draw(playerObj.image);
-		window.draw(helloText);
+
+		for (int i = 0; i < 5; i++)
+		{
+			window.draw(level[i].image);
+		}
 
 		// Update the window
 		window.display();

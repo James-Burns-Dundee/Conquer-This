@@ -14,17 +14,14 @@ public:
 	float yVelocity;
 	float xPos;
 	float yPos;
+	int jumpState;
 	int scale;
-	float topSide;
-	float bottomSide;
-	float leftSide;
-	float rightSide;
 	bool faceRight;
 	bool onGround;
 	bool isColliding;
 	sf::Sprite image;
 
 	// Functions
-	void update(bool u, bool d, bool l, bool r, Block plat);
-	void collision(float dx, float dy, Block platform);
+	void update(bool r, bool l, bool u, bool d, Block level[5], float dt);
+	void collision(float dx, float dy, Block level[5]);
 };
