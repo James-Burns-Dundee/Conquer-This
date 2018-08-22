@@ -1,8 +1,9 @@
+#pragma once
+
 #include <iostream>
 #include <SFML\Graphics.hpp>
 #include "Block.h"
 
-#pragma once
 class Player
 {
 public:
@@ -22,6 +23,6 @@ public:
 	sf::Sprite image;
 
 	// Functions
-	void update(bool r, bool l, bool u, bool d, Block level[5], float dt);
-	void collision(float dx, float dy, Block level[5]);
+	void update(bool r, bool l, bool u, bool d, Block level[15], float dt);
+	void collision(float dx, float dy, Block level[15]);
 };

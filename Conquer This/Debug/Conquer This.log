@@ -1,3 +1,4 @@
-﻿  Player.cpp
+﻿  Main.cpp
+c:\users\user\documents\visual studio 2015\projects\conquer this (working copy)\trunk\conquer this\main.cpp(50): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Conquer This.vcxproj -> C:\Users\User\Documents\Visual Studio 2015\Projects\Conquer This (Working Copy)\trunk\Debug\Conquer This.exe
   Conquer This.vcxproj -> C:\Users\User\Documents\Visual Studio 2015\Projects\Conquer This (Working Copy)\trunk\Debug\Conquer This.pdb (Full PDB)

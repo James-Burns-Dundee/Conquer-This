@@ -18,7 +18,7 @@ Player::~Player()
 {
 }
 
-void Player::update(bool keyRight, bool keyLeft, bool keyUp, bool keyDown, Block level[5], float dt)
+void Player::update(bool keyRight, bool keyLeft, bool keyUp, bool keyDown, Block level[15], float dt)
 {
 	if (keyRight)
 	{
@@ -52,9 +52,9 @@ void Player::update(bool keyRight, bool keyLeft, bool keyUp, bool keyDown, Block
 	collision(0, yVelocity, level);
 }
 
-void Player::collision(float dx, float dy, Block level[5])
+void Player::collision(float dx, float dy, Block level[15])
 {
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 15; i++)
 	{
 		if (image.getPosition().x + (image.getLocalBounds().width* scale) > level[i].leftSide && image.getPosition().x < level[i].rightSide &&
 			image.getPosition().y < level[i].bottomSide && image.getPosition().y + (image.getLocalBounds().height * scale) > level[i].topSide)

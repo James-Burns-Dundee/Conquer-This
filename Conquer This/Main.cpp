@@ -1,9 +1,11 @@
 #include <SFML\Graphics.hpp>
 #include "Player.h"
 #include "Block.h"
+#include "Entity.h"
+#include "PlayerVertex.h"
 
-int windowWidth = 900;
-int windowHeight = 600;
+int windowWidth = 1260;
+int windowHeight = 720;
 
 int main()
 {
@@ -13,26 +15,39 @@ int main()
 	bool keyUp, keyDown, keyLeft, keyRight = false;
 
 	sf::Texture platformSpriteSheet;
-
 	platformSpriteSheet.loadFromFile("Assets/Images/PlatformSheet1.png");
 	sf::Sprite earthSprite(platformSpriteSheet);
-	earthSprite.setTextureRect(sf::IntRect(15, 15, 15, 15));
+	earthSprite.setTextureRect(sf::IntRect(0, 0, 60, 60));
 
 	sf::Texture playerTexture;
 	playerTexture.loadFromFile("Assets/Images/Sprite.png");
 	sf::Sprite playerSprite(playerTexture);
-	playerSprite.getTextureRect();
+	//playerSprite.getTextureRect();
 
 	Player playerObj(playerSprite);
 
-	Block level[5] =
+	Block level[15] =
 	{
-		Block(100, 200, earthSprite),
-		Block(145, 200, earthSprite),
-		Block(190, 200, earthSprite),
-		Block(235, 200, earthSprite),
-		Block(280, 200, earthSprite)
+		Block(100, 220, earthSprite),
+		Block(160, 220, earthSprite),
+		Block(220, 220, earthSprite),
+		Block(280, 220, earthSprite),
+		Block(340, 220, earthSprite),
+		Block(400, 220, earthSprite),
+		Block(400, 160, earthSprite),
+		Block(400, 100, earthSprite),
+		Block(460, 100, earthSprite),
+		Block(520, 100, earthSprite),
+		Block(520, 160, earthSprite),
+		Block(520, 220, earthSprite),
+		Block(580, 220, earthSprite),
+		Block(640, 220, earthSprite),
+		Block(700, 220, earthSprite)
 	};
+
+	PlayerVertex playerVertex("Assets/Images/Sprite.png", 200, 100, 42, 50);
+
+	sf::View view(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(windowWidth, windowHeight));
 
 	sf::Clock gameClock;
 	// Start the game loop
@@ -56,15 +71,19 @@ int main()
 		float deltaTime = gameClock.getElapsedTime().asSeconds();
 
 		playerObj.update(keyRight, keyLeft, keyUp, keyDown, level, deltaTime);
-
+		view.setCenter(sf::Vector2f(playerObj.image.getPosition().x + playerObj.image.getLocalBounds().width * playerObj.scale / 2.0f, playerObj.image.getPosition().y + playerObj.image.getLocalBounds().height * playerObj.scale / 2.0f));
 		gameClock.restart().asSeconds();
 
+		window.setView(view);
+
 		// Clear screen
-		window.clear();
+		window.clear(sf::Color(37, 155, 180));
 
+		// Draw player, blocks, enemies etc to the screen
 		window.draw(playerObj.image);
+//		window.draw(playerVertex);     Unused part of tutorial video
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 15; i++)
 		{
 			window.draw(level[i].image);
 		}

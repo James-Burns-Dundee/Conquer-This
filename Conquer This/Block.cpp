@@ -2,7 +2,7 @@
 
 Block::Block(float initXPos, float initYPos, sf::Sprite sprite)
 {
-	scale = 3;
+	scale = 1;
 	image = sprite;
 	image.setPosition(initXPos, initYPos);
 	image.setScale(scale, scale);
